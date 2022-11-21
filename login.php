@@ -1,7 +1,8 @@
 <?php
     session_start();
     include 'db_connect.php';
-
+    require 'vendor/autoload.php';
+    use GeoIp2\Database\Reader;
 //    if(isset($_SESSION['']))
 
 ?>
@@ -76,13 +77,28 @@
             $_SESSION['client_ip'] = $_SERVER['REMOTE_ADDR'];
             $_SESSION['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
             $_SESSION['last_login'] = time();
+
+            $reader = new Reader('GeoLite2-City.mmdb');
+            $record = $reader->city('202.58.177.130');
+//            $record = $reader->city($_SERVER['REMOTE_ADDR']);
+
+            $ipinfo = json_decode(file_get_contents("http://ipinfo.io/202.58.177.130"));
+//            $ipinfo = json_decode(file_get_contents("http://ipinfo.io/".$_SERVER['REMOTE_ADDR']));
+
+            $_SESSION['location'] = 'in progress';
             echo '<pre>';
             echo var_dump($_SESSION);
             echo '<br>';
             echo var_dump($_SERVER);
+            echo '<br>';
+            echo var_dump($record->city->name);
+            echo '<br>';
+            echo var_dump($record->postal->code);
+//            echo '<br>';
+//            echo var_dump($ipinfo);
             echo '</pre>';
             die;
-
+//            http://maxmind.github.io/GeoIP2-php/
         }
         else
         {
