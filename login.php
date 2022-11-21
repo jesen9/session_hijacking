@@ -50,7 +50,6 @@
     if(isset($_POST["login"]))
     {
         $login = $db_connect->prepare("SELECT * FROM user WHERE Username = ? AND Password = ?");
-        echo var_export($db_connect->error);
         $login->bind_param('ss', $username, $password);
 
         $username = $_POST['username'];
